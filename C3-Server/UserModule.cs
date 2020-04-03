@@ -14,15 +14,17 @@ namespace C3Server
 
         public UserModule()
         {
-            // Get JSON about a given user
-            Get("/file/{FilePath}", param => ReturnFileData(param.FilePath));
-
-            // Delete an existing user            
+            Get("/file/{FilePath}", param => ReturnFileData(param.FilePath));           
             Delete("/file/{FilePath}", param => DeleteFile(param.FilePath));
-
-            // Add a new user
             Put("/file/{FilePath}", param => CreateFile(param.FilePath));
 
+            Get(@"/(.*)", _ =>  HttpStatusCode.Forbidden);
+            Put(@"/(.*)", _ => HttpStatusCode.Forbidden);
+            Delete(@"/(.*)", _ => HttpStatusCode.Forbidden);
+
+            Get("/", _ => HttpStatusCode.Forbidden);
+            Put("/", _ => HttpStatusCode.Forbidden);
+            Delete("/", _ => HttpStatusCode.Forbidden);
         }
 
         public string ReturnFileData(String path)
@@ -47,6 +49,5 @@ namespace C3Server
             string res = JsonConvert.SerializeObject(userFile);
             return res;
         }
-
     }
 }
